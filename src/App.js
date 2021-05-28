@@ -1,24 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { Home } from "./Components/Home";
+import { Product } from "./Components/Product";
+import { Navbar } from "./Components/Navbar";
 
+import { BrowserRouter, Link, Switch, Route, Redirect } from "react-router-dom";
+import { useState } from "react";
+import { ProductCard } from "./Components/ProductCard";
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const handleLogin = () => setIsLoggedIn(!isLoggedIn);
+  const productsList = [
+    {
+      name: "product 1 to7fa",
+      id: 1,
+    },
+    {
+      name: "product 2 ",
+      id: 2,
+    },
+    {
+      name: "product 3 normal",
+      id: 3,
+    },
+  ];
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Navbar isLoggedIn={isLoggedIn} handleLogin={handleLogin} />
+      </div>
+      <Switch>
+        <Route path="/category">
+          <div>
+            <h2>here category</h2>
+          </div>
+        </Route>
+        <Route exact path="/products">
+          <Product products={productsList} />
+        </Route>
+        <Route path="/products/:id" >
+          <ProductCard products={productsList} />
+        </Route>
+
+        <Route path="/admin">
+          {!isLoggedIn ? <Redirect to="/" /> : <h2> admin page</h2>}
+        </Route>
+        <Route exact path="/" component={Home} />
+
+        <Route>
+          <h1> OPSS bet3mel ayh hena?</h1>{" "}
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
